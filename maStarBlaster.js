@@ -28,78 +28,11 @@ class FallingObj {
     }
 }
 
-let isTargetHit = setInterval(() => {
 
-    const phasers = document.querySelectorAll("#phaser");
-    const fallingObjs = [...document.querySelectorAll("#enemy")];
-    fallingObjs.push(...document.querySelectorAll("#powerup"));
-    // console.log('fallingObjs: ');
-    // console.log(fallingObjs);
-    
-    // Check if any targets have been hit
-    fallingObjs.forEach(fallingObj => {
-        phasers.forEach(phaser => {
-            if (isOverlapping(fallingObj, phaser)) {
-                handleFallingObjHit(fallingObj, phaser);
-            }
-        })
-         // Check for spaceship colisions
-        if (isOverlapping(fallingObj, spaceship)) {
-            handleSpaceshipHit(fallingObj);
-        }
-    });
-
-    if (health <= 0) {
-        alert(`Game Over!\nFinal Score: ${gameScore}`)
-    }
-}, 10);
-
-function handleFallingObjHit(fallingObj, phaser) {
-    // console.log('HIT!');
-    // Remove the phaser and fallingObj that was hit
-    fallingObj.remove();
-    phaser.remove();
-
-    switch (fallingObj.id) {
-    case 'enemy':
-        gameScore += 10;
-        gameScoreElement.textContent = gameScore;
-        break;
-    case 'powerup':
-        if (health < 100) {
-            health += 5;
-            healthBarElement.textContent = health;
-        }
-        break;
-    }
-    
-    
-};
-
-function handleSpaceshipHit(target) {
-    target.remove();
-    health -= 10;
-    healthBarElement.textContent = health;
-};
 
 function startGame() {
     console.log('Game Started!!')
 };
-
-// if one or more expressions in the parenthese are true, 
-// there's no overlapping. If all are false, there must be an overlapping
-function isOverlapping(el1, el2) {
-
-    const domRect1 = el1.getBoundingClientRect();
-    const domRect2 = el2.getBoundingClientRect();
-
-    return !(
-        domRect1.right < domRect2.left || 
-        domRect1.left > domRect2.right || 
-        domRect1.bottom < domRect2.top || 
-        domRect1.top > domRect2.bottom
-    );
-}
 
 // TODO: Move game start logic to start on start game button click
 document.getElementById("gameBody").onload = function() {
@@ -145,6 +78,82 @@ document.getElementById("gameBody").onload = function() {
     }, 1000);
 };
 
+
+////////////////////////////
+// Game Helper Functions //
+///////////////////////////
+function getElementPosition(el) {
+    // Get the top, left coordinates of two elements
+    const eleRect = el.getBoundingClientRect();
+    const targetRect = gameWindow.getBoundingClientRect();
+
+    // Calculate the top and left positions
+    const top = eleRect.top - targetRect.top;
+    const left = eleRect.left - targetRect.left;
+
+    return { top: top, left: left}
+}
+
+const shootPhaser = () => {
+    const phaserDiv = document.createElement('div');
+    phaserDiv.setAttribute("id", "phaser");
+    phaserDiv.style.left = `${getElementPosition(spaceship).left + 21}px`;
+    gameWindow.appendChild(phaserDiv);
+
+    setTimeout(() => {
+        // console.log('Removing...');
+        phaserDiv.remove();
+    }, 800);
+}
+
+function handleFallingObjHit(fallingObj, phaser) {
+    // console.log('HIT!');
+    // Remove the phaser and fallingObj that was hit
+    fallingObj.remove();
+    phaser.remove();
+
+    switch (fallingObj.id) {
+    case 'enemy':
+        gameScore += 10;
+        gameScoreElement.textContent = gameScore;
+        break;
+    case 'powerup':
+        if (health < 100) {
+            health += 5;
+            healthBarElement.textContent = health;
+        }
+        break;
+    }
+    
+    
+};
+
+let isTargetHit = setInterval(() => {
+
+    const phasers = document.querySelectorAll("#phaser");
+    const fallingObjs = [...document.querySelectorAll("#enemy")];
+    fallingObjs.push(...document.querySelectorAll("#powerup"));
+    // console.log('fallingObjs: ');
+    // console.log(fallingObjs);
+    
+    // Check if any targets have been hit
+    fallingObjs.forEach(fallingObj => {
+        phasers.forEach(phaser => {
+            if (isOverlapping(fallingObj, phaser)) {
+                handleFallingObjHit(fallingObj, phaser);
+            }
+        })
+         // Check for spaceship colisions
+        if (isOverlapping(fallingObj, spaceship)) {
+            handleSpaceshipHit(fallingObj);
+        }
+    });
+
+    if (health <= 0) {
+        alert(`Game Over!\nFinal Score: ${gameScore}`)
+    }
+}, 10);
+
 // Control user input!
 // TODO: When pressing space + arrow nothing happens
 document.addEventListener('keydown', (event) => {
@@ -174,27 +183,23 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-const shootPhaser = () => {
-    const phaserDiv = document.createElement('div');
-    phaserDiv.setAttribute("id", "phaser");
-    phaserDiv.style.left = `${getElementPosition(spaceship).left + 21}px`;
-    gameWindow.appendChild(phaserDiv);
+// if one or more expressions in the parenthese are true, 
+// there's no overlapping. If all are false, there must be an overlapping
+function isOverlapping(el1, el2) {
 
-    setTimeout(() => {
-        // console.log('Removing...');
-        phaserDiv.remove();
-    }, 800);
+    const domRect1 = el1.getBoundingClientRect();
+    const domRect2 = el2.getBoundingClientRect();
+
+    return !(
+        domRect1.right < domRect2.left || 
+        domRect1.left > domRect2.right || 
+        domRect1.bottom < domRect2.top || 
+        domRect1.top > domRect2.bottom
+    );
 }
 
-
-function getElementPosition(el) {
-    // Get the top, left coordinates of two elements
-    const eleRect = el.getBoundingClientRect();
-    const targetRect = gameWindow.getBoundingClientRect();
-
-    // Calculate the top and left positions
-    const top = eleRect.top - targetRect.top;
-    const left = eleRect.left - targetRect.left;
-
-    return { top: top, left: left}
-}
+function handleSpaceshipHit(target) {
+    target.remove();
+    health -= 10;
+    healthBarElement.textContent = health;
+};
