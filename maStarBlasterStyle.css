@@ -1,0 +1,74 @@
+#starBlasterTitle {
+    text-align: center;
+    margin: auto;
+    font-family: 'ArcadeClassic', sans-serif;
+}
+
+#starBlasterWindow {
+    position: relative;
+    margin: auto;
+    border: 2px solid black;
+    height: 550px;
+    width: 400px;
+    background-image: url('imgs/space_background.png');
+}
+
+#spaceShip {
+    position: relative;
+    top: 500px;
+    background-image: url('imgs/spaceship.png');
+    background-size: cover;
+    height: 50px;
+    width: 50px;
+    left: 0px;
+    z-index: 100;
+    border: red;
+}
+
+#phaser {
+    position: absolute;
+    background-color: cyan;
+    height: 25px;
+    width: 4px;
+    border-radius: 5px;
+    animation: phaserShoot 0.8s linear;
+    /* top: 410px; */
+}
+
+#enemy {
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background-color: red;
+    animation: fallingObject 2.7s linear;
+    /* margin-left: 17px; */
+}
+
+#powerup {
+    position: absolute;
+    height: 15px;
+    width: 15px;
+    background-color: green;
+    animation: fallingObject 2.7s linear;
+    /* margin-left: 17px; */
+}
+
+@keyframes phaserShoot {
+    0% {
+        top: 490px;
+    }
+
+    100% {
+        top: 0px
+    }
+}
+
+@keyframes fallingObject {
+    0% {
+        top: 0px;
+    }
+
+    100% {
+        top: 537px
+    }
+}
