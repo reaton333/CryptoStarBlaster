@@ -11,6 +11,8 @@ This project is currently in development. Users should expect some basic functio
 
 ![Stars Blaster](https://github.com/reaton333/MA_Stars_Blaster/assets/9939349/7b1faa84-d8bf-448a-8e54-e5f83ae4ec9e)
 
+![Stars Blaster Screenshot](https://github.com/reaton333/MA_Stars_Blaster/assets/9939349/917a707e-6520-4154-9500-9c7fd2117c67)
+
 
 
 ## Installation and Setup Instructions
