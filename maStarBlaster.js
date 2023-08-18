@@ -1,11 +1,22 @@
 const spaceship = document.getElementById('spaceShip');
 let offsetVal = 0;
 const gameWindow = document.getElementById("starBlasterWindow");
+const gameWindowWidth = Number(gameWindow.clientWidth);
 const gameScoreElement = document.getElementById("gameScore");
 const healthBarElement = document.getElementById("healthBar");
+const gameStartButton = document.getElementById("gameStartBtn");
 const SPACESHIP_MOVEMENT_AMT = 16; 
-let gameScore = Number(gameScoreElement.textContent);
-let health = Number(healthBarElement.textContent);
+const gridLines = gameWindowWidth / SPACESHIP_MOVEMENT_AMT;
+const STARTING_HEALTH_VAL = 20;
+const STARTING_GAME_SCORE_VAL = 0;
+let health = STARTING_HEALTH_VAL;
+let gameScore = STARTING_GAME_SCORE_VAL;
+let gameStarted = false;
+const TARGET_POSITIONS = [];
+
+let fallingObjInterval = null;
+let checkForHitInterval = null;
+
 // putting more enemies in the array below
 // results in more possiblity of an enemy being generated
 // since we randomly pick from this array
@@ -28,31 +39,86 @@ class FallingObj {
     }
 }
 
-let isTargetHit = setInterval(() => {
+function startGame() {
+    // console.log('Game Started!!');
 
-    const phasers = document.querySelectorAll("#phaser");
-    const fallingObjs = [...document.querySelectorAll("#enemy")];
-    fallingObjs.push(...document.querySelectorAll("#powerup"));
-    // console.log('fallingObjs: ');
-    // console.log(fallingObjs);
+    setInitialGameStartingValues();
     
-    // Check if any targets have been hit
-    fallingObjs.forEach(fallingObj => {
-        phasers.forEach(phaser => {
-            if (isOverlapping(fallingObj, phaser)) {
-                handleFallingObjHit(fallingObj, phaser);
-            }
-        })
-         // Check for spaceship colisions
-        if (isOverlapping(fallingObj, spaceship)) {
-            handleSpaceshipHit(fallingObj);
-        }
-    });
-
-    if (health <= 0) {
-        alert(`Game Over!\nFinal Score: ${gameScore}`)
+    // Exclude the edge spaces
+    for (let i = 1; i < gridLines-1; i++) {
+        TARGET_POSITIONS.push(i*SPACESHIP_MOVEMENT_AMT);
     }
-}, 10);
+
+    fallingObjInterval = setInterval(generateFallingObjects, 1000);
+    checkForHitInterval = setInterval(checkForTargetHit, 10);
+};
+
+function endGame() {
+    clearInterval(fallingObjInterval);
+    clearInterval(checkForHitInterval);
+    alert(`Game Over!\nFinal Score: ${gameScore}`);
+    gameStartButton.disabled = false;
+    gameStarted = false;
+    gameScoreElement.textContent = STARTING_GAME_SCORE_VAL;
+    healthBarElement.textContent = STARTING_HEALTH_VAL;
+}
+
+function setInitialGameStartingValues() {
+    gameScoreElement.textContent = STARTING_GAME_SCORE_VAL;
+    healthBarElement.textContent = STARTING_HEALTH_VAL;
+    gameStarted = true;
+    gameStartButton.disabled = true;
+}
+
+
+function generateFallingObjects() {
+    
+    const fallingTarget = document.createElement('div');
+
+    // Decide whether to drop power up or enemy
+    const currObjIdx = Math.floor(Math.random()*FALLING_OBJ_TYPES.length);
+
+    const currFallingObjType = FALLING_OBJ_TYPES[currObjIdx];
+    const currFallingObj = new FallingObj(currFallingObjType);
+
+    fallingTarget.setAttribute("id", currFallingObj.type);
+    gameWindow.appendChild(fallingTarget);
+
+    // Now randomly generate number from 1 to gridLines size
+    const targetPositionIndex = Math.floor(Math.random()*(TARGET_POSITIONS.length));
+    fallingTarget.style.marginLeft = TARGET_POSITIONS[targetPositionIndex] + "px";
+
+    setTimeout(() => {
+        fallingTarget.remove();
+    }, 2700);
+};
+
+////////////////////////////
+// Game Helper Functions //
+///////////////////////////
+function getElementPosition(el) {
+    // Get the top, left coordinates of two elements
+    const eleRect = el.getBoundingClientRect();
+    const targetRect = gameWindow.getBoundingClientRect();
+
+    // Calculate the top and left positions
+    const top = eleRect.top - targetRect.top;
+    const left = eleRect.left - targetRect.left;
+
+    return { top: top, left: left}
+}
+
+function shootPhaser() {
+    const phaserDiv = document.createElement('div');
+    phaserDiv.setAttribute("id", "phaser");
+    phaserDiv.style.left = `${getElementPosition(spaceship).left + 21}px`;
+    gameWindow.appendChild(phaserDiv);
+
+    setTimeout(() => {
+        // console.log('Removing...');
+        phaserDiv.remove();
+    }, 800);
+}
 
 function handleFallingObjHit(fallingObj, phaser) {
     // console.log('HIT!');
@@ -72,19 +138,63 @@ function handleFallingObjHit(fallingObj, phaser) {
         }
         break;
     }
-    
-    
 };
 
-function handleSpaceshipHit(target) {
-    target.remove();
-    health -= 10;
-    healthBarElement.textContent = health;
-};
+function checkForTargetHit() {
+    // console.log('checkForTargetHit....');
+    const phasers = document.querySelectorAll("#phaser");
+    const fallingObjs = [...document.querySelectorAll("#enemy")];
+    fallingObjs.push(...document.querySelectorAll("#powerup"));
+    // console.log('fallingObjs: ');
+    // console.log(fallingObjs);
+    
+    // Check if any targets have been hit
+    fallingObjs.forEach(fallingObj => {
+        phasers.forEach(phaser => {
+            if (isOverlapping(fallingObj, phaser)) {
+                handleFallingObjHit(fallingObj, phaser);
+            }
+        })
+        // Check for spaceship collisions
+        if (isOverlapping(fallingObj, spaceship)) {
+            handleSpaceshipHit(fallingObj);
+            if (health <= 0) {
+                endGame();
+            }
+        }
+    });
+}
 
-function startGame() {
-    console.log('Game Started!!')
-};
+// Control user input!
+// TODO: When pressing space + arrow nothing happens
+document.addEventListener('keydown', (event) => {
+
+    if (gameStarted) {
+        switch (event.key) {
+            case "ArrowLeft":
+    
+                if (!((offsetVal - SPACESHIP_MOVEMENT_AMT) < 0)) {
+                    offsetVal -= SPACESHIP_MOVEMENT_AMT;
+                    // console.log('offsetVal: ' + offsetVal);
+                    spaceship.style.left = offsetVal + "px";
+                }
+    
+                break;
+            case "ArrowRight":
+                
+                if (!((offsetVal + SPACESHIP_MOVEMENT_AMT) > 366)) {
+                    offsetVal += SPACESHIP_MOVEMENT_AMT;
+                    // console.log('offsetVal: ' + offsetVal);
+                    spaceship.style.left = offsetVal + "px";
+                }
+                break;
+            case " ":
+                // console.log('Space pressed');
+                shootPhaser();
+                break;
+        }
+    }
+});
 
 // if one or more expressions in the parenthese are true, 
 // there's no overlapping. If all are false, there must be an overlapping
@@ -101,100 +211,8 @@ function isOverlapping(el1, el2) {
     );
 }
 
-// TODO: Move game start logic to start on start game button click
-document.getElementById("gameBody").onload = function() {
-
-    // Get Game widow width
-    const gameWindowWidth = Number(gameWindow.clientWidth);
-    // find grid
-    const gridLines = gameWindowWidth / SPACESHIP_MOVEMENT_AMT;
-    // console.log('gridLines: ' + gridLines)
-
-    const target_positions = [];
-    for (let i = 1; i < gridLines-1; i++) {
-        target_positions.push(i*SPACESHIP_MOVEMENT_AMT)
-    }
-    // console.log(target_positions);
-
-    // Loop that generates falling objects
-    setInterval(() => {
-        // console.log('Creating a target...');
-        const fallingTarget = document.createElement('div');
-
-        // Decide whether to drop power up or enemy
-        const currObjIdx = Math.floor(Math.random()*FALLING_OBJ_TYPES.length);
-
-        const currFallingObjType = FALLING_OBJ_TYPES[currObjIdx];
-        const currFallingObj = new FallingObj(currFallingObjType);
-        // console.log(currFallingObj);
-
-        fallingTarget.setAttribute("id", currFallingObj.type);
-        gameWindow.appendChild(fallingTarget);
-
-        // Now randomly generate number from 1 to gridLines size
-        const targetPositionIndex = Math.floor(Math.random()*(target_positions.length));
-
-        // console.log('Target position margin left:');
-        // console.log(target_positions[targetPositionIndex] + "px")
-
-        fallingTarget.style.marginLeft = target_positions[targetPositionIndex] + "px"
-
-        setTimeout(() => {
-            fallingTarget.remove();
-        }, 2700);
-    }, 1000);
+function handleSpaceshipHit(target) {
+    target.remove();
+    health -= 10;
+    healthBarElement.textContent = health;
 };
-
-// Control user input!
-// TODO: When pressing space + arrow nothing happens
-document.addEventListener('keydown', (event) => {
-
-    switch (event.key) {
-        case "ArrowLeft":
-
-            if (!((offsetVal - SPACESHIP_MOVEMENT_AMT) < 0)) {
-                offsetVal -= SPACESHIP_MOVEMENT_AMT;
-                // console.log('offsetVal: ' + offsetVal);
-                spaceship.style.left = offsetVal + "px";
-            }
-
-            break;
-        case "ArrowRight":
-            
-            if (!((offsetVal + SPACESHIP_MOVEMENT_AMT) > 366)) {
-                offsetVal += SPACESHIP_MOVEMENT_AMT;
-                // console.log('offsetVal: ' + offsetVal);
-                spaceship.style.left = offsetVal + "px";
-            }
-            break;
-        case " ":
-            // console.log('Space pressed');
-            shootPhaser();
-            break;
-    }
-});
-
-const shootPhaser = () => {
-    const phaserDiv = document.createElement('div');
-    phaserDiv.setAttribute("id", "phaser");
-    phaserDiv.style.left = `${getElementPosition(spaceship).left + 21}px`;
-    gameWindow.appendChild(phaserDiv);
-
-    setTimeout(() => {
-        // console.log('Removing...');
-        phaserDiv.remove();
-    }, 800);
-}
-
-
-function getElementPosition(el) {
-    // Get the top, left coordinates of two elements
-    const eleRect = el.getBoundingClientRect();
-    const targetRect = gameWindow.getBoundingClientRect();
-
-    // Calculate the top and left positions
-    const top = eleRect.top - targetRect.top;
-    const left = eleRect.left - targetRect.left;
-
-    return { top: top, left: left}
-}
