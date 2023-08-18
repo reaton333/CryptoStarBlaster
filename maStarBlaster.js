@@ -141,7 +141,7 @@ function handleFallingObjHit(fallingObj, phaser) {
 };
 
 function checkForTargetHit() {
-    console.log('checkForTargetHit....');
+    // console.log('checkForTargetHit....');
     const phasers = document.querySelectorAll("#phaser");
     const fallingObjs = [...document.querySelectorAll("#enemy")];
     fallingObjs.push(...document.querySelectorAll("#powerup"));
