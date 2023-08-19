@@ -60,12 +60,12 @@ function endGame() {
     gameStartButton.disabled = false;
     gameStarted = false;
     gameScoreElement.textContent = STARTING_GAME_SCORE_VAL;
-    healthBarElement.textContent = STARTING_HEALTH_VAL;
+    setHealthValue(STARTING_HEALTH_VAL);
 }
 
 function setInitialGameStartingValues() {
     gameScoreElement.textContent = STARTING_GAME_SCORE_VAL;
-    healthBarElement.textContent = STARTING_HEALTH_VAL;
+    setHealthValue(STARTING_HEALTH_VAL);
     gameStarted = true;
     gameStartButton.disabled = true;
 }
@@ -134,7 +134,7 @@ function handleFallingObjHit(fallingObj, phaser) {
     case 'powerup':
         if (health < 100) {
             health += 5;
-            healthBarElement.textContent = health;
+            setHealthValue(health);
         }
         break;
     }
@@ -214,5 +214,23 @@ function isOverlapping(el1, el2) {
 function handleSpaceshipHit(target) {
     target.remove();
     health -= 10;
-    healthBarElement.textContent = health;
+    setHealthValue(health);
+};
+
+function setHealthValue(healthVal) {
+    
+    healthBarElement.value = healthVal;
+
+    if (healthVal <= 20) {
+        // healthBarElement.style.backgroundColor = "red";
+        healthBarElement.classList.add("health-red");
+    }
+    if (healthVal > 20 && healthVal <= 65) {
+        // healthBarElement.style.backgroundColor = "yellow";
+        healthBarElement.classList.add("health-yellow");
+    }
+    if (healthVal > 65) {
+        // healthBarElement.style.backgroundColor = "green";
+        healthBarElement.classList.add("health-green");
+    }
 };
