@@ -16,11 +16,13 @@
     <h1 id="starBlasterTitle">Star</h1>
     <h1 id="starBlasterTitle">Blaster</h1>
     <div id="starBlasterWindow">
+        <div id="gameInfoArea">
+            <progress id="healthBar" value="32" max="100"></progress>
+            <h2 id="gameScoreTitle">Score</h2>
+            <div id="gameScore"></div>
+        </div>
         <div id="spaceShip"></div>
     </div>
-    <div id="healthBar"></div>
-    <div id="gameScore"></div>
-
     <button id="gameStartBtn" onclick="startGame()">Start Game</button>
 </body>
 <script src="maStarBlaster.js"></script>

@@ -13,14 +13,52 @@
     background-image: url('imgs/space_background.png');
 }
 
-#spaceShip {
+#gameInfo {
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+}
+
+#gameScoreTitle {
+    width: 30%;
     position: relative;
+    /* top: 0; */
+    text-align: center;
+    margin: auto;
+    font-family: 'ArcadeClassic', sans-serif;
+    color: red;
+    font-size: 20px;
+}
+
+#gameScore {
+    width: 30%;
+    position: relative;
+    /* top: 0; */
+    text-align: center;
+    margin: auto;
+    font-family: 'ArcadeClassic', sans-serif;
+    color: white;
+    font-size: 20px;
+}
+
+
+#healthBar {
+    width: 20%;
+    position: absolute;
+    left: 0;
+    /* margin: auto; */
+    color: green;
+    font-size: 20px;
+}
+
+#spaceShip {
+    position: absolute;
     top: 500px;
     background-image: url('imgs/spaceship.png');
     background-size: cover;
     height: 50px;
     width: 50px;
-    left: 0px;
+    /* left: 0px; */
     z-index: 100;
     border: red;
 }
