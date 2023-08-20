@@ -14,6 +14,10 @@ let gameScore = STARTING_GAME_SCORE_VAL;
 let gameStarted = false;
 const TARGET_POSITIONS = [];
 
+const RECHARGE_SOUND = new Audio('sounds/mixkit-video-game-health-recharge-2837.wav');
+RECHARGE_SOUND.volume = 0.5;
+const ENEMY_HIT_SOUND = new Audio('sounds/mixkit-small-hit-in-a-game-2072.wav');
+
 let fallingObjInterval = null;
 let checkForHitInterval = null;
 
@@ -128,10 +132,14 @@ function handleFallingObjHit(fallingObj, phaser) {
 
     switch (fallingObj.id) {
     case 'enemy':
+        ENEMY_HIT_SOUND.pause();
+        ENEMY_HIT_SOUND.play();
         gameScore += 10;
         gameScoreElement.textContent = gameScore;
         break;
     case 'powerup':
+        RECHARGE_SOUND.pause();
+        RECHARGE_SOUND.play();
         if (health < 100) {
             health += 5;
             setHealthValue(health);
