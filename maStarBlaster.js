@@ -14,6 +14,13 @@ let gameScore = STARTING_GAME_SCORE_VAL;
 let gameStarted = false;
 const TARGET_POSITIONS = [];
 
+const PHASER_SHOOT_SOUND = new Audio('sounds/mixkit-arcade-retro-changing-tab-206.wav');
+const RECHARGE_SOUND = new Audio('sounds/mixkit-video-game-health-recharge-2837.wav');
+RECHARGE_SOUND.volume = 0.5;
+const ENEMY_HIT_SOUND = new Audio('sounds/mixkit-small-hit-in-a-game-2072.wav');
+const SPACESHIP_HIT_SOUND = new Audio('sounds/mixkit-failure-arcade-alert-notification-240.wav');
+const GAMEOVER_SOUND = new Audio('sounds/mixkit-arcade-retro-game-over-213.wav');
+
 let fallingObjInterval = null;
 let checkForHitInterval = null;
 
@@ -56,6 +63,8 @@ function startGame() {
 function endGame() {
     clearInterval(fallingObjInterval);
     clearInterval(checkForHitInterval);
+    // GAMEOVER_SOUND.play();
+    playSound(GAMEOVER_SOUND);
     alert(`Game Over!\nFinal Score: ${gameScore}`);
     gameStartButton.disabled = false;
     gameStarted = false;
@@ -113,7 +122,7 @@ function shootPhaser() {
     phaserDiv.setAttribute("id", "phaser");
     phaserDiv.style.left = `${getElementPosition(spaceship).left + 21}px`;
     gameWindow.appendChild(phaserDiv);
-
+    playSound(PHASER_SHOOT_SOUND);
     setTimeout(() => {
         // console.log('Removing...');
         phaserDiv.remove();
@@ -128,10 +137,16 @@ function handleFallingObjHit(fallingObj, phaser) {
 
     switch (fallingObj.id) {
     case 'enemy':
+        // ENEMY_HIT_SOUND.pause();
+        // ENEMY_HIT_SOUND.play();
+        playSound(ENEMY_HIT_SOUND);
         gameScore += 10;
         gameScoreElement.textContent = gameScore;
         break;
     case 'powerup':
+        // RECHARGE_SOUND.pause();
+        // RECHARGE_SOUND.play();
+        playSound(RECHARGE_SOUND);
         if (health < 100) {
             health += 5;
             setHealthValue(health);
@@ -212,6 +227,8 @@ function isOverlapping(el1, el2) {
 }
 
 function handleSpaceshipHit(target) {
+    // SPACESHIP_HIT_SOUND.play();
+    playSound(SPACESHIP_HIT_SOUND);
     target.remove();
     health -= 10;
     setHealthValue(health);
@@ -234,3 +251,8 @@ function setHealthValue(healthVal) {
         healthBarElement.classList.add("health-green");
     }
 };
+
+function playSound(theAudio){
+    theAudio.currentTime = 0;
+    theAudio.play();
+}
