@@ -21,7 +21,7 @@ This app is a plain old javascript, HTML, CSS app. Nothing fancy is required at 
 
 To Visit App:
 
-URL coming soon  
+[cryptoStarBlaster url](https://reaton333.github.io/CryptoStarBlaster/!
 
 ## Reflection
 
