@@ -2,6 +2,7 @@
     --ship-shake-amount: 5deg;
     --game_height: 550px;
     --game-width: 400px;
+    --game-fire-btn-size: 75px;
 }
 
 #starBlasterTitle {
@@ -42,14 +43,26 @@
 
 #gameplayButtons {
     margin: auto;
+    padding-top: 6px;
     width: var(--game-width);
+    justify-content: space-between;
+    display: flex;
+}
+
+.gameBtn {
+    height: var(--game-fire-btn-size);
+    width: var(--game-fire-btn-size);
+}
+
+#directionControlButtons {
+    white-space: nowrap;
+    align-items: flex-start;
 }
 
 #shootPhaserBtn {
     border-radius: 50%;
-    background-color: darkred;
-    height: 50px;
-    width: 50px;
+    background-color: red;
+    align-items: flex-end;
 }
 
 #gameScore {
@@ -62,7 +75,6 @@
     color: white;
     font-size: 20px;
 }
-
 
 #healthBar {
     width: 20%;
