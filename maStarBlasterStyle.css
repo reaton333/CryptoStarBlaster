@@ -2,7 +2,7 @@
     --ship-shake-amount: 5deg;
     --game_height: 550px;
     --game-width: 400px;
-  }
+}
 
 #starBlasterTitle {
     text-align: center;
@@ -43,6 +43,13 @@
 #gameplayButtons {
     margin: auto;
     width: var(--game-width);
+}
+
+#shootPhaserBtn {
+    border-radius: 50%;
+    background-color: darkred;
+    height: 50px;
+    width: 50px;
 }
 
 #gameScore {

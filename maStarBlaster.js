@@ -5,6 +5,9 @@ const gameWindowWidth = Number(gameWindow.clientWidth);
 const gameScoreElement = document.getElementById("gameScore");
 const healthBarElement = document.getElementById("healthBar");
 const gameStartButton = document.getElementById("gameStartBtn");
+const moveLeftBtn = document.getElementById("moveLeftBtn");
+const moveRightBtn = document.getElementById("moveRightBtn");
+const shootPhaserBtn = document.getElementById("shootPhaserBtn");
 const SPACESHIP_MOVEMENT_AMT = 16; 
 const gridLines = gameWindowWidth / SPACESHIP_MOVEMENT_AMT;
 const STARTING_HEALTH_VAL = 20;
@@ -18,12 +21,16 @@ let gameScore = STARTING_GAME_SCORE_VAL;
 let gameStarted = false;
 const TARGET_POSITIONS = [];
 
+/////////////////////
+// Set Game Values //
+/////////////////////
 const PHASER_SHOOT_SOUND = new Audio('sounds/mixkit-arcade-retro-changing-tab-206.wav');
 const RECHARGE_SOUND = new Audio('sounds/mixkit-video-game-health-recharge-2837.wav');
 RECHARGE_SOUND.volume = 0.5;
 const ENEMY_HIT_SOUND = new Audio('sounds/mixkit-small-hit-in-a-game-2072.wav');
 const SPACESHIP_HIT_SOUND = new Audio('sounds/mixkit-failure-arcade-alert-notification-240.wav');
 const GAMEOVER_SOUND = new Audio('sounds/mixkit-arcade-retro-game-over-213.wav');
+
 
 let fallingObjInterval = null;
 let checkForHitInterval = null;
@@ -71,6 +78,7 @@ function endGame() {
     gameStarted = false;
     gameScoreElement.textContent = STARTING_GAME_SCORE_VAL;
     setHealthValue(STARTING_HEALTH_VAL);
+    disableGameButtons(true);
 }
 
 function setInitialGameStartingValues() {
@@ -78,8 +86,14 @@ function setInitialGameStartingValues() {
     setHealthValue(STARTING_HEALTH_VAL);
     gameStarted = true;
     gameStartButton.disabled = true;
+    disableGameButtons(false);
 }
 
+function disableGameButtons(doDisable) {
+    moveLeftBtn.disabled = doDisable;
+    moveRightBtn.disabled = doDisable;
+    shootPhaserBtn.disabled = doDisable;
+}
 
 function generateFallingObjects() {
     
