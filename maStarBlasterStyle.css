@@ -1,5 +1,7 @@
 :root {
     --ship-shake-amount: 5deg;
+    --game_height: 550px;
+    --game-width: 400px;
   }
 
 #starBlasterTitle {
@@ -12,8 +14,8 @@
     position: relative;
     margin: auto;
     border: 2px solid black;
-    height: 550px;
-    width: 400px;
+    height: var(--game_height);
+    width: var(--game-width);
     background-image: url('imgs/space_background.png');
 }
 
@@ -36,6 +38,11 @@
     font-family: 'ArcadeClassic', sans-serif;
     color: red;
     font-size: 20px;
+}
+
+#gameplayButtons {
+    margin: auto;
+    width: var(--game-width);
 }
 
 #gameScore {

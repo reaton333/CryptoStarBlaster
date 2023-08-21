@@ -127,7 +127,7 @@ function shootPhaser() {
     setTimeout(() => {
         phaserDiv.remove();
     }, 800);
-}
+};
 
 function handleFallingObjHit(fallingObj, phaser) {
     // Remove the phaser and fallingObj that was hit
@@ -149,7 +149,7 @@ function handleFallingObjHit(fallingObj, phaser) {
         break;
     }
 };
-
+ 
 function checkForTargetHit() {
     // console.log('checkForTargetHit....');
     const phasers = document.querySelectorAll("#phaser");
@@ -182,29 +182,33 @@ document.addEventListener('keydown', (event) => {
     if (gameStarted) {
         switch (event.key) {
             case "ArrowLeft":
-    
-                if (!((offsetVal - SPACESHIP_MOVEMENT_AMT) < 0)) {
-                    offsetVal -= SPACESHIP_MOVEMENT_AMT;
-                    // console.log('offsetVal: ' + offsetVal);
-                    spaceship.style.left = offsetVal + "px";
-                }
-    
+                moveLeft();
                 break;
             case "ArrowRight":
-                
-                if (!((offsetVal + SPACESHIP_MOVEMENT_AMT) > 366)) {
-                    offsetVal += SPACESHIP_MOVEMENT_AMT;
-                    // console.log('offsetVal: ' + offsetVal);
-                    spaceship.style.left = offsetVal + "px";
-                }
+                moveRight();
                 break;
-            case " ":
-                // console.log('Space pressed');
+            case " ": // spacebar
                 shootPhaser();
                 break;
         }
     }
 });
+
+function moveLeft() {
+    if (!((offsetVal - SPACESHIP_MOVEMENT_AMT) < 0)) {
+        offsetVal -= SPACESHIP_MOVEMENT_AMT;
+        // console.log('offsetVal: ' + offsetVal);
+        spaceship.style.left = offsetVal + "px";
+    }
+};
+
+function moveRight() {
+    if (!((offsetVal + SPACESHIP_MOVEMENT_AMT) > 366)) {
+        offsetVal += SPACESHIP_MOVEMENT_AMT;
+        // console.log('offsetVal: ' + offsetVal);
+        spaceship.style.left = offsetVal + "px";
+    }
+};
 
 // if one or more expressions in the parenthese are true, 
 // there's no overlapping. If all are false, there must be an overlapping
