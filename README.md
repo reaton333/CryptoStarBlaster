@@ -1,5 +1,5 @@
-## MA_Stars_Blaster
-A simple Galaga-style game for Medicare Advantage Stars built with Javascript, CSS, and HTML.
+## CryptoStarBlaster
+A simple Galaga-style game where you can blast crypto logos to score points! Built with Javascript, CSS, and HTML.
 
 
 ## Project Status
