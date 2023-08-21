@@ -5,6 +5,10 @@
     --game-fire-btn-size: 75px;
 }
 
+* {
+    touch-action: manipulation;
+}
+
 #starBlasterTitle {
     text-align: center;
     margin: auto;
