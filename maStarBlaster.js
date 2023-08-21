@@ -9,6 +9,10 @@ const SPACESHIP_MOVEMENT_AMT = 16;
 const gridLines = gameWindowWidth / SPACESHIP_MOVEMENT_AMT;
 const STARTING_HEALTH_VAL = 20;
 const STARTING_GAME_SCORE_VAL = 0;
+const HEALTH_MAX = 100;
+const POWERUP_AMOUT = 5;
+const ENEMY_SCORE_BONUS = 10;
+
 let health = STARTING_HEALTH_VAL;
 let gameScore = STARTING_GAME_SCORE_VAL;
 let gameStarted = false;
@@ -38,17 +42,15 @@ class FallingObj {
         this.type = type;
 
         if (type == 'enemy') {
-            this.damage = -10;
+            this.damage = -ENEMY_SCORE_BONUS;
         } else {
-            this.damage = 10;
+            this.damage = ENEMY_SCORE_BONUS;
         }
         // this.img = img;
     }
 }
 
 function startGame() {
-    // console.log('Game Started!!');
-
     setInitialGameStartingValues();
     
     // Exclude the edge spaces
@@ -63,7 +65,6 @@ function startGame() {
 function endGame() {
     clearInterval(fallingObjInterval);
     clearInterval(checkForHitInterval);
-    // GAMEOVER_SOUND.play();
     playSound(GAMEOVER_SOUND);
     alert(`Game Over!\nFinal Score: ${gameScore}`);
     gameStartButton.disabled = false;
@@ -124,31 +125,25 @@ function shootPhaser() {
     gameWindow.appendChild(phaserDiv);
     playSound(PHASER_SHOOT_SOUND);
     setTimeout(() => {
-        // console.log('Removing...');
         phaserDiv.remove();
     }, 800);
 }
 
 function handleFallingObjHit(fallingObj, phaser) {
-    // console.log('HIT!');
     // Remove the phaser and fallingObj that was hit
     fallingObj.remove();
     phaser.remove();
 
     switch (fallingObj.id) {
     case 'enemy':
-        // ENEMY_HIT_SOUND.pause();
-        // ENEMY_HIT_SOUND.play();
         playSound(ENEMY_HIT_SOUND);
-        gameScore += 10;
+        gameScore += ENEMY_SCORE_BONUS;
         gameScoreElement.textContent = gameScore;
         break;
     case 'powerup':
-        // RECHARGE_SOUND.pause();
-        // RECHARGE_SOUND.play();
         playSound(RECHARGE_SOUND);
-        if (health < 100) {
-            health += 5;
+        if (health < HEALTH_MAX) {
+            health += POWERUP_AMOUT;
             setHealthValue(health);
         }
         break;
@@ -227,10 +222,13 @@ function isOverlapping(el1, el2) {
 }
 
 function handleSpaceshipHit(target) {
-    // SPACESHIP_HIT_SOUND.play();
     playSound(SPACESHIP_HIT_SOUND);
+    spaceship.classList.add("shipShake");
+    setTimeout(() => {
+        spaceship.classList.remove("shipShake");
+    }, "210")
     target.remove();
-    health -= 10;
+    health -= ENEMY_SCORE_BONUS;
     setHealthValue(health);
 };
 
