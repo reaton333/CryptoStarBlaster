@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="maStarBlasterStyle.css">
 </head>
 <body id="gameBody">
-
     <h1 id="starBlasterTitle">Star</h1>
     <h1 id="starBlasterTitle">Blaster</h1>
     <div id="starBlasterWindow">
@@ -22,6 +21,13 @@
             <div id="gameScore">0</div>
         </div>
         <div id="spaceShip"></div>
+    </div>
+    <div id="gameplayButtons">
+        <div id="directionControlButtons">
+            <button id="moveLeftBtn" class="gameBtn" disabled onmousedown="moveLeft()">&lt;</button>
+            <button id="moveRightBtn" class="gameBtn" disabled onmousedown="moveRight()">&gt;</button>
+        </div>
+        <button id="shootPhaserBtn" class="gameBtn" disabled onmousedown="shootPhaser()"></button>
     </div>
     <button id="gameStartBtn" onclick="startGame()">Start Game</button>
 </body>
