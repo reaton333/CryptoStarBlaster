@@ -7,12 +7,12 @@
 
 * {
     touch-action: manipulation;
+    font-family: 'ArcadeClassic', sans-serif;
 }
 
 #starBlasterTitle {
     text-align: center;
     margin: auto;
-    font-family: 'ArcadeClassic', sans-serif;
 }
 
 #starBlasterWindow {
@@ -28,6 +28,25 @@
     width: 100%;
     position: absolute;
     z-index: 10;
+}
+
+#startSplashScreen {
+    z-index: 100;
+    display: flex;
+}
+
+#starBlasterTitle {
+    color: yellow;
+    justify-content: center;
+    align-items: center;
+}
+
+#gameStartBtn {
+    background-color: red;
+    border-radius: 4px;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .shipShake {

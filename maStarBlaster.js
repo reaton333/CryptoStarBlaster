@@ -75,6 +75,7 @@ function endGame() {
     playSound(GAMEOVER_SOUND);
     alert(`Game Over!\nFinal Score: ${gameScore}`);
     gameStartButton.disabled = false;
+    gameStartButton.style.display = "block";
     gameStarted = false;
     gameScoreElement.textContent = STARTING_GAME_SCORE_VAL;
     setHealthValue(STARTING_HEALTH_VAL);
@@ -86,6 +87,7 @@ function setInitialGameStartingValues() {
     setHealthValue(STARTING_HEALTH_VAL);
     gameStarted = true;
     gameStartButton.disabled = true;
+    gameStartButton.style.display = "none";
     disableGameButtons(false);
 }
 
