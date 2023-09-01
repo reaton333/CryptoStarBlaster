@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="maStarBlasterStyle.css">
 </head>
 <body id="gameBody">
-    <h1 id="starBlasterTitle">Star</h1>
-    <h1 id="starBlasterTitle">Blaster</h1>
     <div id="starBlasterWindow">
         <div id="gameInfoArea">
             <progress id="healthBar" value="20" max="100"></progress>
@@ -21,15 +19,18 @@
             <div id="gameScore">0</div>
         </div>
         <div id="spaceShip"></div>
+        <div id="startSplashScreen">
+            <h1 id="starBlasterTitle">Crypto Star Blaster</h1>
+            <button id="gameStartBtn" onclick="startGame()">Press Start</button>
+        </div>
     </div>
     <div id="gameplayButtons">
         <div id="directionControlButtons">
-            <button id="moveLeftBtn" class="gameBtn" disabled onmousedown="moveLeft()">&lt;</button>
-            <button id="moveRightBtn" class="gameBtn" disabled onmousedown="moveRight()">&gt;</button>
+            <button id="moveLeftBtn" class="gameBtn" disabled ontouchstart="moveLeft()">&lt;</button>
+            <button id="moveRightBtn" class="gameBtn" disabled ontouchstart="moveRight()">&gt;</button>
         </div>
-        <button id="shootPhaserBtn" class="gameBtn" disabled onmousedown="shootPhaser()"></button>
+        <button id="shootPhaserBtn" class="gameBtn" disabled ontouchstart="shootPhaser()"></button>
     </div>
-    <button id="gameStartBtn" onclick="startGame()">Start Game</button>
 </body>
 <script src="maStarBlaster.js"></script>
 </html>
